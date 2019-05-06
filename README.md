@@ -1,12 +1,22 @@
-# ProbGAN
+# ProbGAN: Towards Probabilistic GAN with Theoretical Guarantees
+This repository contains the PyTorch implementation of the ProbGAN. 
+This paper appears at ICLR 2019.
+If you find this repo useful for your research, please consider citing our [[paper]](https://openreview.net/forum?id=H1l7bnR5Ym).
 
-This is a PyTorch implementation of the paper <b>[]()</b>
-<br/>
+```
+@article{he2018probgan,
+  title={ProbGAN: Towards Probabilistic GAN with Theoretical Guarantees},
+  author={He, Hao and Wang, Hao and Lee, Guang-He and Tian, Yonglong},
+  year={2018}
+}
+```
+
+## Results
 
 
-## Dependencies
-* [Python 3.5+](https://www.anaconda.com/distribution/)
-* [PyTorch 0.4.0+](http://pytorch.org/)
+
+## Install
+This codebase is tested with Ubuntu 16.04 LTS, Python 3.6.8, PyTorch 1.0.0, and CUDA 9.0.
 
 ## Usage
 
@@ -20,12 +30,3 @@ cd probgan.fc
 ```
 
 ## Citation
-If you find this repo useful for your research, please consider citing our paper.
-
-```
-@article{he2018bayesian,
-  title={x},
-  author={He, Hao and Wang, Hao and Lee, Guang-He and Tian, Yonglong},
-  year={2018}
-}
-```
