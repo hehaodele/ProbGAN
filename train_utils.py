@@ -191,3 +191,15 @@ def print_log_2(epoch, epoches, iteration, iters, learning_rate,
 
 def save_checkpoint(state, filename='checkpoint'):
     torch.save(state, filename + '.pth.tar')
+
+def grad_info(parameters):
+    total_norm = 0
+    total_abs_max = 0
+    for p in parameters:
+        param_norm = p.grad.data.norm(2)
+        total_norm += param_norm.item() ** 2
+        vmax = p.grad.data.abs().max().item()
+        if vmax > total_abs_max:
+            total_abs_max = vmax
+    total_norm = total_norm ** (1. / 2)
+    return total_norm, total_abs_max

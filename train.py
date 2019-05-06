@@ -23,12 +23,12 @@ def parse():
     W: Wasserstein GAN
     LS: Least-Square GAN
     """
-    parser.add_argument('--gan_obj', default='NS', type=str, dest='gan_obj', help='[NS, MM, LS, W]')
+    parser.add_argument('--gan_obj', default='NS', type=str, dest='gan_obj', help='[NS | MM | LS | W]')
 
     """
     Paths
     """
-    parser.add_argument('--dataset', default='cifar', type=str, dest='dataset', help='dataset')
+    parser.add_argument('--dataset', default='cifar', type=str, dest='dataset', help='dataset: [cifar10, stl10, imagenet]')
     parser.add_argument('--save_dir', default='none', type=str, dest='save_dir', help='save_path')
 
     return parser.parse_args()
@@ -243,6 +243,11 @@ def train_net(G, D, args, config):
                             os.path.join(args.save_dir, 'D_epoch_{}'.format(epoch)))
             save_checkpoint({'epoch': epoch, 'state_dict': G.state_dict(), },
                             os.path.join(args.save_dir, 'G_epoch_{}'.format(epoch)))
+            # plot gradient information
+            tmp = grad_info(G.parameters())
+            print('G grad l2-norm: {}, value max: {}'.format(tmp[0], tmp[1]))
+            tmp = grad_info(D.parameters())
+            print('D grad l2-norm: {}, value max: {}'.format(tmp[0], tmp[1]))
 
         if (epoch + 1) % config.dump_ep == 0:
             batch_size = 100
