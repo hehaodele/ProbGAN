@@ -20,13 +20,3 @@ This codebase is tested with Ubuntu 16.04 LTS, Python 3.6.8, PyTorch 1.0.0, and 
 
 ## Usage
 
-#### Image Data
-```bash
-cd probgan.pix
-```
-#### Vector Data
-```bash
-cd probgan.fc
-```
-
-## Citation

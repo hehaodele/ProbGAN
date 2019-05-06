@@ -10,21 +10,38 @@ from easydict import EasyDict
 def parse():
     parser = argparse.ArgumentParser()
     """
-    Bayesian 
+    Hyper-parameter for Stochastic Gradient Hamiltonian Monte Carlo
     """
     parser.add_argument('--sghmc_alpha', default=0.01, type=int, dest='sghmc_alpha', help='number of generators')
     parser.add_argument('--g_noise_loss_lambda', default=3e-2, type=float, dest='g_noise_loss_lambda')
     parser.add_argument('--d_noise_loss_lambda', default=3e-2, type=float, dest='d_noise_loss_lambda')
     parser.add_argument('--d_hist_loss_lambda', default=1.0, type=float, dest='d_hist_loss_lambda')
+    """
+    GAN objectives
+    NS: original GAN (Non-saturating version)
+    MM: original GAN (Min-max version)
+    W: Wasserstein GAN
+    LS: Least-Square GAN
+    """
     parser.add_argument('--gan_obj', default='NS', type=str, dest='gan_obj', help='[NS, MM, LS, W]')
 
+    """
+    Paths
+    """
     parser.add_argument('--dataset', default='cifar', type=str, dest='dataset', help='dataset')
-    parser.add_argument('--save_dir', default='xxx', type=str, dest='save_dir', help='save_path')
+    parser.add_argument('--save_dir', default='none', type=str, dest='save_dir', help='save_path')
 
     return parser.parse_args()
 
 
 def construct_model(args, config):
+    '''
+    :param args: Experiment Information
+    :param config: Neural Network Architecture Configurations
+    :return:
+        G: generator structure
+        D: discriminator structure
+    '''
     D_unbound_output = args.gan_obj in ['W', 'LS']
     if config.image_size == 32:
         G = multi_generator_32(z_size=config.z_size, out_size=config.channel_size, ngf=config.ngf,
@@ -48,6 +65,9 @@ def train_net(G, D, args, config):
     noise_std = np.sqrt(2 * args.sghmc_alpha)
     G_noise_sampler = [get_sghmc_noise(g) for g in G.gs]
     D_noise_sampler = get_sghmc_noise(D)
+
+    if args.save_dir == 'none':
+        args.save_dir = './dump/train_{}_{}'.format(args.dataset, args.gan_obj)
 
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
@@ -253,20 +273,32 @@ if __name__ == '__main__':
 
     config = EasyDict()
 
+
+    """
+    Number of Generator/Discriminator Monte-Carlo samples
+    """
+    config.num_gens = 10
+    config.num_discs = 4
+
+    """
+    Architecture Hyper-parameters
+    """
+    config.z_size = 100
+    config.channel_size = 3
+    config.ngf = 128
+    config.ndf = 128
+
+    """
+    Training Hyper-parameters
+    """
     config.workers = 10
     config.display = 800
 
     config.batch_size = 64
     config.g_batch_size = 128
-    config.num_gens = 10
-    config.num_discs = 4
     config.base_lr = 0.0001
     config.beta1 = 0.5
 
-    config.z_size = 100
-    config.channel_size = 3
-    config.ngf = 128
-    config.ndf = 128
 
     if args.dataset == 'cifar10':
         from datasets import get_cifar10
