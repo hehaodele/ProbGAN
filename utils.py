@@ -1,6 +1,5 @@
 from torch_head import *
 from common_head import *
-from progressbar import ProgressBar
 
 
 # ======================================================================================================================
