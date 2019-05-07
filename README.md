@@ -21,7 +21,14 @@ This codebase is tested with Ubuntu 16.04 LTS, Python 3.6.8, PyTorch 1.0.0, and 
 
 ## Usage
 
-Train ProbGAN on different dataset with different GAN objectives.
+To train ProbGAN on different dataset with different GAN objectives.
+
+    GAN objectives
+    NS: original GAN (Non-saturating version)
+    MM: original GAN (Min-max version)
+    W: Wasserstein GAN
+    LS: Least-Square GAN
+
 ```bash
 python train.py --dataset [cifar10 | stl10] --gan_obj [NS | MM | W | LS]
 ```
