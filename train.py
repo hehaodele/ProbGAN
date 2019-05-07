@@ -112,7 +112,8 @@ def train_net(G, D, args, config):
     G_n_losses = AverageMeter()
 
     fixed_noise = torch.FloatTensor(10 * 10, config.z_size, 1, 1).normal_(0, 1)
-    fixed_noise = Variable(fixed_noise.cuda(), volatile=True)
+    with torch.no_grad():
+        fixed_noise = Variable(fixed_noise.cuda())
 
     end = time.time()
 
@@ -244,7 +245,7 @@ def train_net(G, D, args, config):
             save_checkpoint({'epoch': epoch, 'state_dict': G.state_dict(), },
                             os.path.join(args.save_dir, 'G_epoch_{}'.format(epoch)))
 
-        # plot gradient information
+        # monitoring gradient behavior & clip it needed
         tmp = grad_info(G.parameters())
         print('G grad l2-norm: {}, value max: {}'.format(tmp[0], tmp[1]))
         tmp = grad_info(D.parameters())

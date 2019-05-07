@@ -13,6 +13,7 @@ If you find this repo useful for your research, please consider citing our [[pap
 
 ## Results
 
+![Result Image](./figures/results_image.png)
 
 
 ## Install

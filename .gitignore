@@ -1,2 +1,4 @@
 .idea
+rsync_dump.py
+dump
 *__pycache__*
