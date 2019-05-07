@@ -1,7 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
 
 # 32 x 32 ==============================================================================================================
 class multi_generator_32(nn.Module):
