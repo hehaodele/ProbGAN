@@ -245,11 +245,14 @@ def train_net(G, D, args, config):
             save_checkpoint({'epoch': epoch, 'state_dict': G.state_dict(), },
                             os.path.join(args.save_dir, 'G_epoch_{}'.format(epoch)))
 
-        # monitoring gradient behavior & clip it needed
+        # monitoring gradient behavior & clip if needed
         tmp = grad_info(G.parameters())
         print('G grad l2-norm: {}, value max: {}'.format(tmp[0], tmp[1]))
         tmp = grad_info(D.parameters())
         print('D grad l2-norm: {}, value max: {}'.format(tmp[0], tmp[1]))
+
+        nn.utils.clip_grad_norm_(parameters=G.parameters(),max_norm=100,norm_type=2)
+        nn.utils.clip_grad_norm_(parameters=D.parameters(),max_norm=500,norm_type=2)
 
         if (epoch + 1) % config.dump_ep == 0:
             batch_size = 100
