@@ -157,7 +157,7 @@ def plot_result(G, fixed_noise, image_size, num_epoch, save_dir, fig_size=(10, 1
 
     for ax, img in zip(axes.flatten(), generate_images):
         ax.axis('off')
-        ax.set_adjustable('box-forced')
+        # ax.set_adjustable('box-forced')
         if is_gray:
             img = img.cpu().data.view(image_size, image_size).numpy()
             ax.imshow(img, cmap='gray', aspect='equal')
@@ -192,14 +192,16 @@ def print_log_2(epoch, epoches, iteration, iters, learning_rate,
 def save_checkpoint(state, filename='checkpoint'):
     torch.save(state, filename + '.pth.tar')
 
+
 def grad_info(parameters):
     total_norm = 0
     total_abs_max = 0
     for p in parameters:
-        param_norm = p.grad.data.norm(2)
-        total_norm += param_norm.item() ** 2
-        vmax = p.grad.data.abs().max().item()
-        if vmax > total_abs_max:
-            total_abs_max = vmax
+        if p.requires_grad:
+            param_norm = p.grad.data.norm(2)
+            total_norm += param_norm.item() ** 2
+            vmax = p.grad.data.abs().max().item()
+            if vmax > total_abs_max:
+                total_abs_max = vmax
     total_norm = total_norm ** (1. / 2)
     return total_norm, total_abs_max

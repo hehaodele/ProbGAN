@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 # 32 x 32 ==============================================================================================================
 class multi_generator_32(nn.Module):
     """
@@ -129,9 +130,14 @@ class multi_discriminator_with_history(nn.Module):
         self.ds = nn.Conv2d(self.ndf * 4, num_discs, 4, 1, 0, bias=False)
         self.n_ds = num_discs
 
-        with torch.no_grad():
-            self.ds_hist_avg = nn.Conv2d(self.ndf * 4, num_discs, 4, 1, 0, bias=False)
-            self.len_hist = 1.0
+        # with torch.no_grad():
+        #     self.ds_hist_avg = nn.Conv2d(self.ndf * 4, num_discs, 4, 1, 0, bias=False)
+        #     self.len_hist = 1.0
+
+        self.ds_hist_avg = nn.Conv2d(self.ndf * 4, num_discs, 4, 1, 0, bias=False)
+        for param in self.ds_hist_avg.parameters():
+            param.requires_grad = False
+        self.len_hist = 1.0
 
         self.backbone = nn.Sequential(
             # input size is in_size x 32 x 32
@@ -306,9 +312,14 @@ class multi_discriminator_48_with_history(nn.Module):
         self.ds = nn.Conv2d(self.ndf * 8, num_discs, 3, 1, 0, bias=False)
         self.n_ds = num_discs
 
-        with torch.no_grad():
-            self.ds_hist_avg = nn.Conv2d(self.ndf * 8, num_discs, 3, 1, 0, bias=False)
-            self.len_hist = 1.0
+        # with torch.no_grad():
+        #     self.ds_hist_avg = nn.Conv2d(self.ndf * 8, num_discs, 3, 1, 0, bias=False)
+        #     self.len_hist = 1.0
+
+        self.ds_hist_avg = nn.Conv2d(self.ndf * 8, num_discs, 3, 1, 0, bias=False)
+        for param in self.ds_hist_avg.parameters():
+            param.requires_grad = False
+        self.len_hist = 1.0
 
         self.backbone = nn.Sequential(
             # input size is in_size x 48 x 48

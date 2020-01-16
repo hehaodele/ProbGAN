@@ -3,7 +3,7 @@ from common_head import *
 from models import *
 from utils import *
 from train_utils import *
-from inception.inception_score_tf import get_inception_score
+# from inception.inception_score_tf import get_inception_score
 from easydict import EasyDict
 
 
@@ -28,7 +28,8 @@ def parse():
     """
     Paths
     """
-    parser.add_argument('--dataset', default='cifar', type=str, dest='dataset', help='dataset: [cifar10, stl10, imagenet]')
+    parser.add_argument('--dataset', default='cifar', type=str, dest='dataset',
+                        help='dataset: [cifar10, stl10, imagenet]')
     parser.add_argument('--save_dir', default='none', type=str, dest='save_dir', help='save_path')
 
     return parser.parse_args()
@@ -251,8 +252,8 @@ def train_net(G, D, args, config):
         tmp = grad_info(D.parameters())
         print('D grad l2-norm: {}, value max: {}'.format(tmp[0], tmp[1]))
 
-        nn.utils.clip_grad_norm_(parameters=G.parameters(),max_norm=100,norm_type=2)
-        nn.utils.clip_grad_norm_(parameters=D.parameters(),max_norm=500,norm_type=2)
+        nn.utils.clip_grad_norm_(parameters=G.parameters(), max_norm=100, norm_type=2)
+        nn.utils.clip_grad_norm_(parameters=D.parameters(), max_norm=500, norm_type=2)
 
         if (epoch + 1) % config.dump_ep == 0:
             batch_size = 100
@@ -265,7 +266,8 @@ def train_net(G, D, args, config):
                 x.append(G_result.detach().cpu().numpy())
             x = np.concatenate(x, axis=0)
             imgs = x
-            m, v = get_inception_score(images=imgs)
+            # m, v = get_inception_score(images=imgs)
+            m, v = 0
             # fid = get_fid_score(images=imgs)
             fid = 0
             print('Epoch {} Inception Score: mean {:.6f} std {:.6f}'.format(epoch + 1, m, v))
@@ -282,7 +284,6 @@ if __name__ == '__main__':
     print(args)
 
     config = EasyDict()
-
 
     """
     Number of Generator/Discriminator Monte-Carlo samples
@@ -308,7 +309,6 @@ if __name__ == '__main__':
     config.g_batch_size = 128
     config.base_lr = 0.0001
     config.beta1 = 0.5
-
 
     if args.dataset == 'cifar10':
         from datasets import get_cifar10

@@ -2,3 +2,4 @@
 rsync.py
 dump
 *__pycache__*
+data
